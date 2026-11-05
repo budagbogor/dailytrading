@@ -1,11 +1,20 @@
-name: QuantSyariah Android APK and Python tests
+name: Android APK and Python tests
 on:
   workflow_dispatch:
   push:
     branches: [main]
   pull_request:
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python scripts/preflight.py
   backend-tests:
+    needs: preflight
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,6 +24,7 @@ jobs:
       - run: pip install -r backend/requirements.txt
       - run: python -m unittest discover -s tests -v
   android-build:
+    needs: [preflight, backend-tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
