@@ -17,6 +17,7 @@ class PaperTradeRequest:
     max_notional_usd: str
     available_cash_usd: str
     reserved_cash_usd: str = '0'
+    available_shares: int = 0
 
 def prepare_paper_trade(request: PaperTradeRequest) -> dict:
     if not isinstance(request, PaperTradeRequest):
